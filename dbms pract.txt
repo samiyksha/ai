@@ -1,0 +1,335 @@
+mysql> use hr;
+Database changed
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ASGN 5(According to syllabus)
+
+mysql> drop table student
+    -> ;
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> create table studn(
+     rollno int primary key,
+     name varchar(20) not null,
+     age int not null);
+Query OK, 0 rows affected (0.40 sec)
+
+mysql> insert into studn(rollno,name,age)
+    values
+    (1,'Kevin',20),
+    (2,'David',20),
+    (3,'Maya',20),
+    (4,'Jessie',20);
+Query OK, 4 rows affected (0.02 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from studn
+    into outfile 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/st.csv'
+    fields terminated by ','
+    enclosed by '"'
+    lines terminated by '\n';
+Query OK, 4 rows affected (0.30 sec)
+
+mysql> create table empl(
+    name varchar(20) not null,
+    dept varchar(20) not null);
+Query OK, 0 rows affected (1.43 sec)
+
+mysql> load data 
+    infile 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/empl.csv';
+ into table empl
+    fields terminated by ','
+    enclosed by '"'
+    lines terminated by '\n';
+Query OK, 4 rows affected (0.42 sec)
+Records: 4  Deleted: 0  Skipped: 0  Warnings: 0
+
+mysql> select * from empl;
++---------+----------+
+| name    | dept     |
++---------+----------+
+ |?Kevin  | finance
+      |   | IT
+      |   | HR
+      |   | IT
++---------+----------+
+4 rows in set (0.10 sec)
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ASGN 1(According to syllabus)
+
+mysql> create table studt(
+    rollno int primary key,
+    name varchar(10) not null,
+    age int not null,
+    gender varchar(10) not null,
+    grade varchar(10) not null);
+Query OK, 0 rows affected (0.77 sec)
+
+mysql> insert into studt(rollno,name,age,gender,grade)
+    values
+    (1,'Kevin',12,'M','A'),
+    (2,'Maya',13,'F','B'),
+    (3,'David',12,'M','A'),
+    (4,'Riley',12,'F','B');
+Query OK, 4 rows affected (0.14 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> update studt
+    set age = 12
+    where rollno = 2;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from studt;
++--------+-------+-----+--------+-------+
+| rollno | name  | age | gender | grade |
++--------+-------+-----+--------+-------+
+|      1 | Kevin |  12 | M      | A     |
+|      2 | Maya  |  12 | F      | B     |
+|      3 | David |  12 | M      | A     |
+|      4 | Riley |  12 | F      | B     |
++--------+-------+-----+--------+-------+
+4 rows in set (0.03 sec)
+
+mysql> delete from studt
+    where rollno = 4;
+Query OK, 1 row affected (0.34 sec)
+
+mysql> select * from studt;
++--------+-------+-----+--------+-------+
+| rollno | name  | age | gender | grade |
++--------+-------+-----+--------+-------+
+|      1 | Kevin |  12 | M      | A     |
+|      2 | Maya  |  12 | F      | B     |
+|      3 | David |  12 | M      | A     |
++--------+-------+-----+--------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table studt
+    add column city varchar(20) not null;
+Query OK, 0 rows affected (0.80 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from studt;
++--------+-------+-----+--------+-------+------+
+| rollno | name  | age | gender | grade | city |
++--------+-------+-----+--------+-------+------+
+|      1 | Kevin |  12 | M      | A     |      |
+|      2 | Maya  |  12 | F      | B     |      |
+|      3 | David |  12 | M      | A     |      |
++--------+-------+-----+--------+-------+------+
+3 rows in set (0.33 sec)
+
+mysql> alter table studt drop column city;
+Query OK, 0 rows affected (0.58 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from studt;
++--------+-------+-----+--------+-------+
+| rollno | name  | age | gender | grade |
++--------+-------+-----+--------+-------+
+|      1 | Kevin |  12 | M      | A     |
+|      2 | Maya  |  12 | F      | B     |
+|      3 | David |  12 | M      | A     |
++--------+-------+-----+--------+-------+
+3 rows in set (0.00 sec)
+
+mysql> CREATE VIEW studu AS
+    SELECT rollno, name, grade
+    FROM studt
+    WHERE grade = 'A';
+Query OK, 0 rows affected (0.42 sec)
+
+mysql> select * from studu;
++--------+-------+-------+
+| rollno | name  | grade |
++--------+-------+-------+
+|      1 | Kevin | A     |
+|      3 | David | A     |
++--------+-------+-------+
+2 rows in set (0.03 sec)
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ASGN 2(According to syllabus)
+
+mysql> drop table orders;
+Query OK, 0 rows affected (0.70 sec)
+
+mysql> drop table customer;
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> create table custo(
+    cust_id int primary key,
+    name varchar(10) not null,
+    email varchar(20) not null,
+    address varchar(10) not null);
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> insert into custo(cust_id,name,email,address)
+    -> values
+    -> (1,'Kevin','kevin@gmail.com','Denvor'),
+    -> (2,'David','david@gmail.com','Detroit'),
+    -> (3,'Maya','maya@gmail.com','Texas'),
+    -> (4,'Riley','riley@gmail.com','London');
+Query OK, 4 rows affected (0.06 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> create table orde(
+    order_id int primary key,
+    cust_id int not null,
+    order_date date not null,
+    total decimal(10,2) not null,
+    foreign key(cust_id) references customer(cust_id));
+Query OK, 0 rows affected (0.26 sec)
+
+mysql> insert into orde(order_id,cust_id,order_date,total)
+    values
+    (1,1,'2022-01-01',100),
+    (2,1,'2022-02-15',150),
+    (3,2,'2022-03-01',200),
+    (4,3,'2022-04-01',250),
+    (5,4,'2022-05-01',300),
+    (6,1,'2022-06-15',350);
+Query OK, 6 rows affected (0.14 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select c.cust_id,c.name,o.order_id,o.order_date,o.total
+    from customer c inner join orders o
+    on c.cust_id = o.cust_id;
++---------+-------+----------+------------+--------+
+| cust_id | name  | order_id | order_date | total  |
++---------+-------+----------+------------+--------+
+|       1 | Kevin |        1 | 2022-01-01 | 100.00 |
+|       1 | Kevin |        2 | 2022-02-15 | 150.00 |
+|       1 | Kevin |        6 | 2022-06-15 | 350.00 |
+|       2 | David |        3 | 2022-03-01 | 200.00 |
+|       3 | Maya  |        4 | 2022-04-01 | 250.00 |
+|       4 | Riley |        5 | 2022-05-01 | 300.00 |
++---------+-------+----------+------------+--------+
+6 rows in set (0.04 sec)
+
+mysql> select c.cust_id,c.name,o.order_id,o.order_date,o.total
+    from customer c left join orders o
+    on c.cust_id = o.cust_id;
++---------+-------+----------+------------+--------+
+| cust_id | name  | order_id | order_date | total  |
++---------+-------+----------+------------+--------+
+|       1 | Kevin |        1 | 2022-01-01 | 100.00 |
+|       1 | Kevin |        2 | 2022-02-15 | 150.00 |
+|       1 | Kevin |        6 | 2022-06-15 | 350.00 |
+|       2 | David |        3 | 2022-03-01 | 200.00 |
+|       3 | Maya  |        4 | 2022-04-01 | 250.00 |
+|       4 | Riley |        5 | 2022-05-01 | 300.00 |
++---------+-------+----------+------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select c.cust_id,c.name,o.order_id,o.order_date,o.total
+    from customer c right join orders o
+    on c.cust_id = o.cust_id;
++---------+-------+----------+------------+--------+
+| cust_id | name  | order_id | order_date | total  |
++---------+-------+----------+------------+--------+
+|       1 | Kevin |        1 | 2022-01-01 | 100.00 |
+|       1 | Kevin |        2 | 2022-02-15 | 150.00 |
+|       2 | David |        3 | 2022-03-01 | 200.00 |
+|       3 | Maya  |        4 | 2022-04-01 | 250.00 |
+|       4 | Riley |        5 | 2022-05-01 | 300.00 |
+|       1 | Kevin |        6 | 2022-06-15 | 350.00 |
++---------+-------+----------+------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select c.cust_id,c.name,o.order_id,o.order_date,o.total
+    from customer c right join orders o
+    on c.cust_id = o.cust_id
+    union
+    select c.cust_id,c.name,o.order_id,o.order_date,o.total
+    from orders o right join customer c
+    on c.cust_id = o.cust_id;
++---------+-------+----------+------------+--------+
+| cust_id | name  | order_id | order_date | total  |
++---------+-------+----------+------------+--------+
+|       1 | Kevin |        1 | 2022-01-01 | 100.00 |
+|       1 | Kevin |        2 | 2022-02-15 | 150.00 |
+|       2 | David |        3 | 2022-03-01 | 200.00 |
+|       3 | Maya  |        4 | 2022-04-01 | 250.00 |
+|       4 | Riley |        5 | 2022-05-01 | 300.00 |
+|       1 | Kevin |        6 | 2022-06-15 | 350.00 |
++---------+-------+----------+------------+--------+
+6 rows in set (0.20 sec)
+
+mysql> select name,email,address
+    from customer
+    where cust_id in (select cust_id from orders);
++-------+-----------------+---------+
+| name  | email           | address |
++-------+-----------------+---------+
+| Kevin | kevin@gmail.com | Denvor  |
+| David | david@gmail.com | Detroit |
+| Maya  | maya@gmail.com  | Texas   |
+| Riley | riley@gmail.com | London  |
++-------+-----------------+---------+
+4 rows in set (0.00 sec)
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Assgn 3
+
+use my_Database
+
+db.createCollection("EmpRec")
+
+db.EmpRec.insertMany([{name:'John', age:25, dsg:'Receptionist'},{name:'Serah', age:24, dsg:'Temporary Employee'},{name:'Lily', age:25, dsg:'Assistant'}])
+
+db.EmpRec. find({dsg:'Assistant'})
+
+db.EmpRec.updateOne({name:'Lily'},{$set:{dsg:'Assistant to regional manager'}})
+
+db.EmpRec.find({name:'Lily'})
+
+db.EmpRec.deleteOne({name:'Serah'})
+
+db.EmpRec.find({name:'John'})
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Assgn 4 
+
+db.sales.insertMany([
+    { item: "Pen", quantity: 5, price: 10, date: new Date("2024-10-18") },
+    { item: "Highlighter", quantity: 15, price: 20, date: new Date("2024-10-19") },
+    { item: "Pencil", quantity: 5, price: 5, date: new Date("2024-10-10") },
+    { item: "Pen", quantity: 10, price: 10, date: new Date("2024-10-20") },
+    { item: "Highlighter", quantity: 5, price: 20, date: new Date("2024-10-21") }
+]);
+
+db.sales.aggregate([
+    {
+        $group: {
+            _id: "$item",
+            totalRevenue: { $sum: { $multiply: ["$quantity", "$price"] } },
+            totalQuantity: { $sum: "$quantity" }
+        }
+    },
+    {
+        $sort: { totalRevenue: -1 }
+    }
+]);
+db.sales.createIndex({ item: 1 });
+db.sales.getIndexes();
+var mapFunction = function() {
+    emit(this.item, { revenue: this.quantity * this.price, quantity: this.quantity });
+};
+var reduceFunction = function(key, values) {
+    var reducedValue = { revenue: 0, quantity: 0 };
+    values.forEach(function(value) {
+        reducedValue.revenue += value.revenue;
+        reducedValue.quantity += value.quantity;
+    });
+    return reducedValue;
+};
+db.sales.mapReduce(
+    mapFunction,
+    reduceFunction,
+    {
+        out: "sales_summary" 
+    }
+);
+db.sales_summary.find();
